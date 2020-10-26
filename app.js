@@ -1,7 +1,7 @@
 /**
  * Example store structure
  */
-const store = {
+const STORE = {
   // 5 or more questions are required
   questions: [
     {
@@ -60,6 +60,8 @@ const store = {
   score: 0
 };
 
+
+
 /**
  * 
  * Technical requirements:
@@ -79,10 +81,110 @@ const store = {
 
 // These functions return HTML templates
 
+function generateStartScreen() {
+  return `<div class="step" id="start-screen">
+      <h3>I have a party trick where if someone names a movie, I can tell you the exact year (and maybe even month) that it came out.</h3>
+      <p>Now it's your turn! Good luck.</p>
+      <button type="submit" class="start-btn">Start Quiz</button>
+  </div>`;
+}
+
+function generateQuizQuestion() {
+  return `<div class="step" id="question">
+  <ul id="total">
+    <li class="question">You're on number {} out of 5.</li>
+    <li class="score">{}/5 correct so far.</li>
+  </div>
+  <form id="question-form">
+    <fieldset>
+      <div class="question">
+        <legend></legend>
+      </div>
+      <div class="answers">
+        <div id="option-container-1">
+          <input type="radio" name="options" id="option1" value="" tabindex="1" required>
+          <label for="option1"></label>
+        </div>
+        <div id="option-container-2">
+          <input type="radio" name="options" id="option2" value="" tabindex="2" required>
+          <label for="option2"></label>
+        </div>
+        <div id="option-container-3">
+          <input type="radio" name="options" id="option3" value="" tabindex="3" required>
+          <label for="option3"></label>
+        </div>
+        <div id="option-container-4">
+          <input type="radio" name="options" id="option4" value="" tabindex="4" required>
+          <label for="option4"></label>
+        </div>
+      </div>
+      <button>Submit</button>
+    </fieldset>
+  </form>
+</div>`;
+}
+
+function generateSummary(){
+  return `<div class="step" id="summary">
+  <form>
+    <fieldset>
+      <div>
+        <h3>You scored {} out of 5.</h3>
+      </div>
+      <button>Restart quiz</button>
+    </fieldset>
+  </form>
+</div>`
+}
+
 /********** RENDER FUNCTION(S) **********/
 
 // This function conditionally replaces the contents of the <main> tag based on the state of the store
 
+function renderQuiz(){
+  console.log('`renderQuiz` ran');
+  // render the start screen in the DOM
+  $('main').html(generateStartScreen());
+  return;
+}
+
+
+
 /********** EVENT HANDLER FUNCTIONS **********/
 
 // These functions handle events (submit, click, etc)
+
+function startQuiz() {
+  // clicks start quiz
+  $(`main`).on('click', '.start-btn', function (event) {
+    console.log('`startQuiz` ran');
+    STORE.quizStarted === false;
+    renderQuiz();
+  });
+}
+
+function nextQuestion() {
+  // clicks to go to next question
+  console.log('`nextQuestion` ran');
+}
+
+function submitAnswer() {
+  // clicks submit answer
+  console.log('`submitAnswer` ran');
+}
+
+function restartQuiz() {
+  // clicks restart quiz
+  console.log('`restartQuiz` ran');
+}
+
+/********** CALLBACK FUNCTION **********/
+function handleQuiz() {
+  renderQuiz();
+  startQuiz();
+  nextQuestion();
+  submitAnswer();
+  restartQuiz();
+}
+
+$(handleQuiz);
