@@ -5,24 +5,54 @@ const store = {
   // 5 or more questions are required
   questions: [
     {
-      question: 'What color is broccoli?',
+      question: 'What year was Jurassic Park released in theaters?',
       answers: [
-        'red',
-        'orange',
-        'pink',
-        'green'
+        '1993',
+        '1997',
+        '1992',
+        '1989'
       ],
-      correctAnswer: 'green'
+      correctAnswer: '1993'
     },
     {
-      question: 'What is the current year?',
+      question: 'What year was The Matrix released in theaters?',
       answers: [
-        '1970',
-        '2015',
-        '2019',
-        '2005'
+        '2005',
+        '2003',
+        '2001',
+        '1999'
       ],
-      correctAnswer: '2019'
+      correctAnswer: '1999'
+    },
+    {
+      question: 'What year was The Dark Knight released in theaters?',
+      answers: [
+        '2011',
+        '2010',
+        '2008',
+        '2004'
+      ],
+      correctAnswer: '2008'
+    },
+    {
+      question: 'What year was Toy Story released in theaters?',
+      answers: [
+        '1992',
+        '1995',
+        '1998',
+        '2000'
+      ],
+      correctAnswer: '1995'
+    },
+    {
+      question: 'What year was Back to the Future released in theaters?',
+      answers: [
+        '1985',
+        '1987',
+        '1980',
+        '1991'
+      ],
+      correctAnswer: '1985'
     }
   ],
   quizStarted: false,
