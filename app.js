@@ -57,9 +57,9 @@ const STORE = {
   ],
   quizStarted: false,
   questionNumber: 0,
-  score: 0
+  score: 0, 
+  currentQuestion: 0
 };
-
 
 
 /**
@@ -81,74 +81,109 @@ const STORE = {
 
 // These functions return HTML templates
 
-function generateStartScreen() {
+function startScreen() {
   return `<div class="step" id="start-screen">
-      <h3>I have a party trick where if someone names a movie, I can tell you the exact year (and maybe even month) that it came out.</h3>
-      <p>Now it's your turn! Good luck.</p>
-      <button type="submit" class="start-btn">Start Quiz</button>
-  </div>`;
-}
-
-function generateQuizQuestion() {
-  return `<div class="step" id="question">
-  <ul id="total">
-    <li class="question">You're on number {} out of 5.</li>
-    <li class="score">{}/5 correct so far.</li>
-  </div>
-  <form id="question-form">
-    <fieldset>
-      <div class="question">
-        <legend></legend>
-      </div>
-      <div class="answers">
-        <div id="option-container-1">
-          <input type="radio" name="options" id="option1" value="" tabindex="1" required>
-          <label for="option1"></label>
-        </div>
-        <div id="option-container-2">
-          <input type="radio" name="options" id="option2" value="" tabindex="2" required>
-          <label for="option2"></label>
-        </div>
-        <div id="option-container-3">
-          <input type="radio" name="options" id="option3" value="" tabindex="3" required>
-          <label for="option3"></label>
-        </div>
-        <div id="option-container-4">
-          <input type="radio" name="options" id="option4" value="" tabindex="4" required>
-          <label for="option4"></label>
-        </div>
-      </div>
-      <button>Submit</button>
-    </fieldset>
-  </form>
+    <h3>I have a party trick where if someone names a movie, I can tell you the exact year (and maybe even month) that it came out.</h3>
+    <p>Now it's your turn! Good luck.</p>
+    <button type="button" id="start-btn">Start Quiz</button>
 </div>`;
 }
 
-function generateSummary(){
-  return `<div class="step" id="summary">
-  <form>
-    <fieldset>
-      <div>
-        <h3>You scored {} out of 5.</h3>
+function questionsHeader() {
+  return `
+  <ul id="total">
+    <li class="question">You're on number ${STORE.currentQuestion + 1} out of ${STORE.questions.length}.</li>
+    <li class="score">${STORE.score}/${STORE.questions.length} answers correct so far.</li>
+  </ul>
+  `;
+}
+
+function questions() {
+  let currentQuestion = STORE.questions[STORE.currentQuestion];
+  return `
+    <form id="question-form">
+      <fieldset>
+          <div class="question">
+              <legend> ${currentQuestion.question}</legend>
+          </div>
+          <div class="answers">
+            ${answers()}
+          </div>
+        <button type="submit" id="answer-btn" tabindex="5">Submit</button>
+        <button type="button" id="next-btn" tabindex="6"> Next Question </button>
+      </fieldset>
+    </form >
+  `;
+  
+}
+
+function answers() {
+  const answerList = STORE.questions[STORE.currentQuestion].answers;
+  let html = '';
+  let i = 0;
+
+  answerList.forEach(answer => {
+    html += `
+      <div id="option-container-${i}">
+        <input type="radio" name="answers" id="option${i + 1}" value= "${answer}" tabindex ="${i + 1}" required> 
+        <label for="option${i + 1}"> ${answer}</label>
       </div>
-      <button>Restart quiz</button>
-    </fieldset>
-  </form>
-</div>`
+    `;
+    i++;
+  });
+  return html;
+}
+
+function resultsScreen() {
+  return `
+  <div class="step" id="summary">
+      <form>
+          <fieldset>
+          <div>
+            <legend>
+              <h3>You scored ${STORE.score} out of ${STORE.questions.length}.</h3>
+            </legend>
+          </div>
+          <button type="button" id="reset-btn">Reset</button>
+          </fieldset>
+      </form>
+  </div>
+  `;
+}
+
+function feedback(answerStatus) {
+  let correctAnswer = STORE.questions[STORE.currentQuestion].correctAnswer;
+  let html = '';
+  if (answerStatus === 'correct') {
+    html = `
+    <div class="right-answer">That is correct!</div>
+    `;
+  }
+  else if (answerStatus === 'incorrect') {
+    html = `
+      <div class="wrong-answer">That is incorrect. The correct answer is ${correctAnswer}.</div>
+    `;
+  }
+  return html;
 }
 
 /********** RENDER FUNCTION(S) **********/
 
 // This function conditionally replaces the contents of the <main> tag based on the state of the store
 
-function renderQuiz(){
-  console.log('`renderQuiz` ran');
-  // render the start screen in the DOM
-  $('main').html(generateStartScreen());
-  return;
+function renderQuiz() {
+  let html = '';
+  if (STORE.quizStarted === false) {
+    $('main').html(startScreen());
+    return;
+  } else if (STORE.currentQuestion >= 0 && STORE.currentQuestion < STORE.questions.length) {
+    html = questionsHeader();
+    html += questions();
+    $('main').html(html);
+  } else {
+    $('main').html(resultsScreen());
+  }
 }
-
-
 
 /********** EVENT HANDLER FUNCTIONS **********/
 
@@ -156,26 +191,57 @@ function renderQuiz(){
 
 function startQuiz() {
   // clicks start quiz
-  $(`main`).on('click', '.start-btn', function (event) {
-    console.log('`startQuiz` ran');
-    STORE.quizStarted === false;
+  $('main').on('click', '#start-btn', function (event) {
+    STORE.quizStarted = true;
     renderQuiz();
   });
 }
 
 function nextQuestion() {
   // clicks to go to next question
-  console.log('`nextQuestion` ran');
+  $('body').on('click', '#next-btn', (event) => {
+    renderQuiz();
+  });
 }
 
 function submitAnswer() {
   // clicks submit answer
-  console.log('`submitAnswer` ran');
+  $('body').on('submit', '#question-form', function (event) {
+    event.preventDefault();
+    const currentQuestion = STORE.questions[STORE.currentQuestion];
+    // get value of answers
+    let selection = $('input[name=answers]:checked').val();
+    let optionContainerId = `#option-container-${currentQuestion.answers.findIndex(i => i === selection)}`;
+
+    if (selection === currentQuestion.correctAnswer) {
+      STORE.score++;
+      $(optionContainerId).append(feedback('correct'));
+    }
+    else {
+      $(optionContainerId).append(feedback('incorrect'));
+    }
+    STORE.currentQuestion++;
+    /* SHOW AND HIDE THE BUTTONS */
+    $('#answer-btn').hide();
+    $('input[type=radio]').each(() => {
+      $('input[type=radio]').attr('disabled', true);
+    });
+    $('#next-btn').show();
+  });
 }
 
 function restartQuiz() {
   // clicks restart quiz
-  console.log('`restartQuiz` ran');
+  $('body').on('click', '#reset-btn', () => {
+    resetQuiz();
+    renderQuiz();
+  });
+}
+
+function resetQuiz() {
+  STORE.quizStarted = false;
+  STORE.currentQuestion = 0;
+  STORE.score = 0;
 }
 
 /********** CALLBACK FUNCTION **********/
