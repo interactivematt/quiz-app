@@ -57,7 +57,7 @@ li span{
   border: none;
   outline: none;
   align-items: center;
-  padding: 0 16px;
+  padding: 16px;
 }
 
 .half{
@@ -120,7 +120,7 @@ fieldset{
 }
 
 img{
-  max-height: 400px;
+  max-height: 320px;
   margin: 0 auto;
   max-width: 100%;
   border-radius: 12px;
@@ -162,12 +162,18 @@ button{
   body{
     max-width: 800px;
   }
+  .step{
+    flex-direction: row-reverse;
+  }
 
   .half{
     width: 50%;
   }
   .feature{
     width: 50%;
+  }
+  img{
+    max-height: 400px;
   }
 }
 
