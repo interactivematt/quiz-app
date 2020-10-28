@@ -1,9 +1,10 @@
 /* Your styles should be mobile-first and responsive */
 
 html{
-  background:#0b0b0f;
-  color: #e8e8ee;
+  background:#242423;
+  color: #e8eddf;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  margin: 0 auto;
 }
 
 body{
@@ -11,9 +12,162 @@ body{
   margin: 0 auto;
 }
 
-@media screen and (min-width: 400px){
+header{
+  text-align: center;
+  padding: 24px 0;
+}
+
+ul{
+  color: #cfdbd5;
+  padding: 0;
+  margin: 0 auto;
+  display: flex;
+  flex: 1 1;
+  justify-content: space-evenly;
+}
+
+li{
+  list-style-type: none;
+  list-style: none;
+  text-align: center;
+  background: #35414d;
+  padding: 24px 48px;
+  border-radius: 12px;
+}
+
+li span{
+  display: block;
+  font-size: 32px;
+  color: #e8eddf;
+  line-height: 1.5;
+}
+
+#start-screen{
+  flex-flow: column-reverse;
+  text-align: center;
+}
+
+#summary{
+  text-align: center;
+}
+
+.step{
+  display: flex;
+  flex-direction: column;
+  border: none;
+  outline: none;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.half{
+  width: 100%;
+  padding: 8px;
+}
+
+fieldset{
+  border: none;
+  outline: none;
+}
+
+.radio{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 16px 0;
+  background: #313335;
+  border-radius: 4px;
+}
+.radio:hover{
+  background: #35414d;
+}
+
+.radio input{
+  height: 24px;
+  width: 24px;
+  padding: 4px;
+  flex: 1 ;
+  background: slategray;
+  color: slategrey;
+  cursor: pointer;
+}
+
+.radio label{
+  width: 100%;
+  height: 100%;
+  padding: 12px 0;
+  flex: 8;
+  cursor: pointer;
+}
+
+.right-answer, .wrong-answer{
+  width: 100%;
+  padding: 8px 12px;
+  background: green;
+}
+
+.wrong-answer{
+  background: red;
+}
+
+.feature{
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  padding: 8px;
+  overflow: hidden;
+}
+
+img{
+  max-height: 400px;
+  margin: 0 auto;
+  max-width: 100%;
+  border-radius: 12px;
+}
+
+button{
+  padding: 16px 20px;
+  background: #f5cb5c;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  color: #242423;
+  font-weight: 700;
+  width: 45%;
+  cursor: pointer;
+}
+
+.buttons{
+  display: flex;
+  justify-content: space-between;
+  margin: 32px 0;
+}
+
+#next-btn{
+  background: #cfdbd5;
+  color: #35414d;
+}
+
+#answer-btn:hover{
+  background: #f8d573;
+}
+
+#reset-btn{
+  width: 100%;
+  max-width: 400px;
+}
+
+@media screen and (min-width: 640px){
   body{
     max-width: 800px;
+  }
+
+  .half{
+    width: 50%;
+  }
+  .feature{
+    width: 50%;
   }
 }
 

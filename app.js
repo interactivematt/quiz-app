@@ -12,7 +12,8 @@ const STORE = {
         '1992',
         '1989'
       ],
-      correctAnswer: '1993'
+      correctAnswer: '1993',
+      movie: 'jurassic-park'
     },
     {
       question: 'What year was The Matrix released in theaters?',
@@ -22,7 +23,8 @@ const STORE = {
         '2001',
         '1999'
       ],
-      correctAnswer: '1999'
+      correctAnswer: '1999',
+      movie: 'the-matrix'
     },
     {
       question: 'What year was The Dark Knight released in theaters?',
@@ -32,7 +34,8 @@ const STORE = {
         '2008',
         '2004'
       ],
-      correctAnswer: '2008'
+      correctAnswer: '2008',
+      movie: 'the-dark-knight'
     },
     {
       question: 'What year was Toy Story released in theaters?',
@@ -42,7 +45,8 @@ const STORE = {
         '1998',
         '2000'
       ],
-      correctAnswer: '1995'
+      correctAnswer: '1995',
+      movie: 'toy-story'
     },
     {
       question: 'What year was Back to the Future released in theaters?',
@@ -52,7 +56,8 @@ const STORE = {
         '1980',
         '1991'
       ],
-      correctAnswer: '1985'
+      correctAnswer: '1985',
+      movie: 'back-to-the-future'
     }
   ],
   quizStarted: false,
@@ -83,17 +88,22 @@ const STORE = {
 
 function startScreen() {
   return `<div class="step" id="start-screen">
-    <h3>I have a party trick where if someone names a movie, I can tell you the exact year (and maybe even month) that it came out.</h3>
-    <p>Now it's your turn! Good luck.</p>
+  <div class="half">
+    <h2>I have a party trick where if someone names a movie, I can tell you the exact year (and maybe even month) that it came out.</h2>
+    <h4>Now it's your turn! Good luck.</h4>
     <button type="button" id="start-btn">Start Quiz</button>
+  </div>
+  <div class="feature">
+    <img src="assets/home.png" alt="Quiz home image.">
+  </div>
 </div>`;
 }
 
 function questionsHeader() {
   return `
   <ul id="total">
-    <li class="question">You're on number ${STORE.currentQuestion + 1} out of ${STORE.questions.length}.</li>
-    <li class="score">${STORE.score}/${STORE.questions.length} answers correct so far.</li>
+    <li class="question">Question: <span>${STORE.currentQuestion + 1} of ${STORE.questions.length}</span></li>
+    <li class="score">Score: <span>${STORE.score} of ${STORE.questions.length}</span></li>
   </ul>
   `;
 }
@@ -101,18 +111,26 @@ function questionsHeader() {
 function questions() {
   let currentQuestion = STORE.questions[STORE.currentQuestion];
   return `
-    <form id="question-form">
+  <div class="step">
+    <div class="feature">
+      <img src="assets/${currentQuestion.movie}.jpg" alt="${currentQuestion.movie} movie poster">
+    </div>
+    <form class="half" id="question-form">
       <fieldset>
           <div class="question">
-              <legend> ${currentQuestion.question}</legend>
+              <legend><h3>${currentQuestion.question}</h3></legend>
           </div>
           <div class="answers">
             ${answers()}
           </div>
-        <button type="submit" id="answer-btn" tabindex="5">Submit</button>
-        <button type="button" id="next-btn" tabindex="6"> Next Question </button>
+        <div class="buttons">
+          <button type="button" id="next-btn" tabindex="6"> Next </button>
+          <button type="submit" id="answer-btn" tabindex="5">Submit</button>
+        </div>
       </fieldset>
     </form >
+    
+  </div>
   `;
   
 }
@@ -124,7 +142,7 @@ function answers() {
 
   answerList.forEach(answer => {
     html += `
-      <div id="option-container-${i}">
+      <div class="radio" id="option-container-${i}">
         <input type="radio" name="answers" id="option${i + 1}" value= "${answer}" tabindex ="${i + 1}" required> 
         <label for="option${i + 1}"> ${answer}</label>
       </div>
@@ -137,14 +155,14 @@ function answers() {
 function resultsScreen() {
   return `
   <div class="step" id="summary">
-      <form>
+      <form class="half">
           <fieldset>
-          <div>
-            <legend>
-              <h3>You scored ${STORE.score} out of ${STORE.questions.length}.</h3>
-            </legend>
+          <ul>
+          <li class="score">Score: <span>${STORE.score} of ${STORE.questions.length}</span></li>
+          </ul>
+          <div class="buttons">
+            <button type="button" id="reset-btn">Restart Quiz</button>
           </div>
-          <button type="button" id="reset-btn">Reset</button>
           </fieldset>
       </form>
   </div>
@@ -161,7 +179,7 @@ function feedback(answerStatus) {
   }
   else if (answerStatus === 'incorrect') {
     html = `
-      <div class="wrong-answer">That is incorrect. The correct answer is ${correctAnswer}.</div>
+      <div class="wrong-answer">Sorry, the correct answer is <strong>${correctAnswer}</strong>.</div>
     `;
   }
   return html;
